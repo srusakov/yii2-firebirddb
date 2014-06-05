@@ -1,0 +1,23 @@
+{
+	"name": "srusakov/firebirddb",
+	"description": "Yii 2 Firebird DB driver",
+	"keywords": ["yii2", "firebird", "database", "driver"],
+	"homepage": "http://github.com/srusakov/yii2-firebirddb",
+	"type": "project",
+	"license": "BSD-3-Clause",
+	"minimum-stability": "dev",
+	"require": {
+		"php": ">=5.4.0",
+		"yiisoft/yii2": "*"
+	},
+	"config": {
+		"process-timeout": 1800
+	},
+
+  "repositories":[
+        {
+            "type":"git",
+            "url":"http://github.com/srusakov/yii2-firebirddb"
+        }
+    ]
+}
