@@ -1,5 +1,5 @@
 yii2-firebirddb - Firebird Adapter for Yii 2.x
-============================
+==============================================
 
 This is an updated version of the adapter YiiFirebird originally posted by
 idlesign. It has been enhanced to be compatible with yii2.
@@ -18,21 +18,37 @@ Requirements
 Installation
 ------------
 
-* Unpack the adapter to `protected/extensions`
-* In your `protected/config/main.php`, add the following:
+* Modify your composer.json:
+
+```json
+...
+"require": {
+    "srusakov/firebirddb": "*"
+	},
+  "repositories":[{
+      "type":"git",
+      "url":"http://github.com/srusakov/yii2-firebirddb",
+  }]
+...
+```
+
+* Modify your common/config/main.php:
 
 ```php
-<?php
-...
-  'components' => array(
-  ...
-    'db' => array(
-      'connectionString'=>'firebird:dbname=localhost:C:\Path\To\Db\MyDB.GDB',
-      'class' => 'ext.YiiFirebird.CFirebirdConnection',
-    ),
-    ...
-  ),
-...
+return [
+    'components' => [
+        'db' => [
+            'class' => 'yii\db\Connection',
+            'dsn' => 'firebird:dbname=HOSTNAME:DATABASENAME.fdb;charset=UTF8',
+            'username' => 'sysdba',
+            'password' => 'masterkey',
+            'charset' => 'utf8',
+            'pdoClass' => 'srusakov\firebirddb\PDO',
+            'schemaMap' => [
+                                'firebird' => 'srusakov\firebirddb\Schema', // FireBird
+                            ],
+        ],
+]
 ```
 
 Restriction
@@ -40,6 +56,10 @@ Restriction
 Some restrictions imposed by Database:
 * Rename tables
 * Using DDL and DML statement in the same transaction and the same table. (Ex: Create table and insert).
+
+Caution!
+--------
+This driver is not well tested in production ebvironment! Use it at your own risk!
 
 Thanks to
 ---------
