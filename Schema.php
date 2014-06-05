@@ -9,6 +9,7 @@
  * @updated by Sergey Rusakov <srusakov@gmail.com>
  */
 namespace srusakov\firebirddb;
+use yii\db\TableSchema;
 
 /**
  * CFirebirdSchema is the class for retrieving metadata information
@@ -22,6 +23,7 @@ namespace srusakov\firebirddb;
 class Schema extends \yii\db\Schema
 {
     private $_sequences = array();
+
 
     /**
      * @var array mapping from physical column types (keys) to abstract
@@ -160,10 +162,10 @@ class Schema extends \yii\db\Schema
         if (isset($parts[1])) {
             $table->schemaName = $parts[0];
             $table->name = strtolower($parts[1]);
-            $table->rawName = $this->quoteTableName($table->schemaName) . '.' . $this->quoteTableName($table->name);
+            $table->fullName = $this->quoteTableName($table->schemaName) . '.' . $this->quoteTableName($table->name);
         } else {
             $table->name = strtolower($parts[0]);
-            $table->rawName = $this->quoteTableName($table->name);
+            $table->fullName = $this->quoteTableName($table->name);
         }
     }
 
@@ -272,7 +274,7 @@ class Schema extends \yii\db\Schema
         foreach ($columns as $column) {
             $c = $this->createColumn($column);
             if ($c->autoIncrement) {
-                $this->_sequences[$table->rawName . '.' . $c->name] = $table->rawName . '.' . $c->name;
+                $this->_sequences[$table->fullName . '.' . $c->name] = $table->fullName . '.' . $c->name;
             }
             $table->columns[$c->name] = $c;
             if ($c->isPrimaryKey) {
@@ -295,13 +297,13 @@ class Schema extends \yii\db\Schema
      */
     protected function createColumn($column)
     {
-        $c = new CFirebirdColumnSchema;
+        $c = new ColumnSchema;
 
         $c->name = strtolower(rtrim($column['fname']));
-        $c->rawName = $this->quoteColumnName($c->name);
+//        $c->rawName = $this->quoteColumnName($c->name);
         $c->allowNull = $column['fnull'] !== '1';
         $c->isPrimaryKey = $column['fprimary'];
-        $c->isForeignKey = false;
+//        $c->isForeignKey = false;
         $c->size = (int) $column['flength'];
         $c->scale = (int) $column['fscale'];
         $c->precision = (int) $column['fprecision'];
