@@ -62,6 +62,31 @@ class QueryBuilder extends \yii\db\QueryBuilder
         return null;
     }
 
+
+    /**
+     * @inheritdoc
+     * Firebird has its own SELECT syntax
+     * SELECT [FIRST (<int-expr>)] [SKIP (<int-expr>)] <columns> FROM ...
+     */
+    public function build($query, $params = [])
+    {
+      list($sql,$params) = parent::build($query, $params);
+      if ($this->hasLimit($query->limit) and $this->hasOffset($query->offset) ) {
+        $sql = preg_replace('/limit\s\d+/i', '', $sql, 1);
+        $sql = preg_replace('/offset\s\d+/i', '', $sql, 1);
+        $sql = preg_replace('/^SELECT /i', "SELECT FIRST {$query->limit} SKIP {$query->offset} ", $sql, 1);
+      } elseif ($this->hasLimit($query->limit)) {
+        $sql = preg_replace('/limit\s\d+/i', '', $sql, 1);
+        $sql = preg_replace('/offset\s\d+/i', '', $sql, 1);
+        $sql = preg_replace('/^SELECT /i', "SELECT FIRST {$query->limit} ", $sql, 1);
+      } elseif ($this->hasOffset($query->offset) ) {
+        $sql = preg_replace('/limit\s\d+/i', '', $sql, 1);
+        $sql = preg_replace('/offset\s\d+/i', '', $sql, 1);
+        $sql = preg_replace('/^SELECT /i', "SELECT SKIP {$query->offset} ", $sql, 1);
+      }
+      return [$sql,$params];
+    }
+
     /**
      * Alters the SQL to apply LIMIT and OFFSET.
      *
