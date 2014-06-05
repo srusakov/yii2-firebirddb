@@ -1,6 +1,6 @@
 {
 	"name": "srusakov/firebirddb",
-  "version": "1.0.3",
+  "version": "1.0.4",
 	"description": "Yii 2 Firebird DB driver",
 	"keywords": ["yii2", "firebird", "database", "driver"],
 	"homepage": "http://github.com/srusakov/yii2-firebirddb",
@@ -9,7 +9,10 @@
 	"require": {
 		"php": ">=5.4.0"
 	},
-
+	"autoload": {
+		"psr-4": {
+			"srusakov\\firebirddb\\": ""
+		}
   "repositories":[
         {
             "type":"git",
