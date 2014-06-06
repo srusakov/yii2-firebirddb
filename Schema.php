@@ -79,7 +79,7 @@ class Schema extends \yii\db\Schema
      */
     public function createQueryBuilder()
     {
-        return new \srusakov\firebirddb\QueryBuilder($this->db);
+        return new QueryBuilder($this->db);
     }
 
     /**
@@ -121,7 +121,7 @@ class Schema extends \yii\db\Schema
      */
     protected function loadTable($name)
     {
-        $table = new CFirebirdTableSchema;
+        $table = new TableSchema;
         $this->resolveTableNames($table, $name);
 
         if ($this->findColumns($table)) {
